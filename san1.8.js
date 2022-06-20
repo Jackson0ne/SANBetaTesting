@@ -62,7 +62,7 @@ if (process.platform == "win32") {
 
 // fs.writeFileSync(path.join(__dirname,"store","local.json"), "");
 const rev = JSON.parse(fs.readFileSync(path.join(sanlocalappdata,"store","version.json")));
-document.getElementById("rev").innerHTML = rev.version;
+document.getElementById("rev").innerHTML = `BETA ${rev.betaversion}`;
 
 var tag = null;
 
