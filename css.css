@@ -195,7 +195,8 @@ a:hover {
 }
 
 .bodycont {
-    background: #1b1b1b;
+    /* background: #1b1b1b; */
+    background: mediumpurple;
     display: flex;
     flex-direction: column;
     justify-content: center;
