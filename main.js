@@ -635,7 +635,7 @@ const startapp = () => {
 
                 notifywin.show();
                 notifywin.webContents.send('notifymain', queueobj.achievement, queueobj.title, queueobj.desc, queueobj.icon, queueobj.screenshot, queueobj.percent, queueobj.audio, gameicon);
-                notifywin.webContents.openDevTools({ mode: 'detach' })
+                // notifywin.webContents.openDevTools({ mode: 'detach' })
             });
 
             ipcMain.once('notifywinstop', function() {
