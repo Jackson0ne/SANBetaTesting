@@ -60,9 +60,15 @@ if (process.platform == "win32") {
     fs.writeFileSync(path.join(sanlocalappdata,"store","launcher.json"), JSON.stringify(launcher, null, 2));
 }
 
-// fs.writeFileSync(path.join(__dirname,"store","local.json"), "");
-const rev = JSON.parse(fs.readFileSync(path.join(sanlocalappdata,"store","version.json")));
-document.getElementById("rev").innerHTML = `BETA ${rev.betaversion}`
+const version = JSON.parse(fs.readFileSync(path.join(sanlocalappdata,"store","version.json")));
+
+if (version.beta == true) {
+    document.getElementById("rev").innerHTML = `BETA ${rev.betaversion}`;
+    document.getElementById("betalogo").style.display = "flex"
+} else {
+    document.getElementById("rev").innerHTML = `${rev.version}`
+    document.getElementById("betalogo").style.display = "none"
+}
 
 var tag = null;
 
@@ -8162,6 +8168,7 @@ function ToggleBeta() {
         ShowBetaDialog()
     } else {
         version["beta"] = false
+        version["betaversion"] = 0
         fs.writeFileSync(path.join(sanlocalappdata,"store","version.json"), JSON.stringify(version, null, 4))
         // ipcRenderer.send('resetcomplete')
     }
@@ -8169,7 +8176,7 @@ function ToggleBeta() {
 
 function BetaAccept() {
     const version = JSON.parse(fs.readFileSync(path.join(sanlocalappdata,"store","version.json")))
-    
+
     document.getElementById("betadialog").style.animation = "poprev 0.2s forwards"
     setTimeout(() => {
         document.getElementById("betaconnecttext").innerHTML = "🌐 Checking Network Connection..."
@@ -8191,6 +8198,7 @@ function BetaAccept() {
         document.getElementById("betaconnecttext").style.margin = "0px"
 
         version["beta"] = true
+        version["betaversion"] = 0
         fs.writeFileSync(path.join(sanlocalappdata,"store","version.json"), JSON.stringify(version, null, 4))
 
         // ipcRenderer.send('resetcomplete')
