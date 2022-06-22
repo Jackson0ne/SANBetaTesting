@@ -1,3 +1,6 @@
 node_modules/
 zstart.cmd
 dist/
+.gitignore
+.gitattributes
+.git/
