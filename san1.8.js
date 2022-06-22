@@ -8170,7 +8170,7 @@ function ToggleBeta() {
         version["beta"] = false
         version["betaversion"] = 0
         fs.writeFileSync(path.join(sanlocalappdata,"store","version.json"), JSON.stringify(version, null, 4))
-        // ipcRenderer.send('resetcomplete')
+        ipcRenderer.send('resetcomplete')
     }
 }
 
@@ -8201,7 +8201,7 @@ function BetaAccept() {
         version["betaversion"] = 0
         fs.writeFileSync(path.join(sanlocalappdata,"store","version.json"), JSON.stringify(version, null, 4))
 
-        // ipcRenderer.send('resetcomplete')
+        ipcRenderer.send('resetcomplete')
     }).catch(err => {
         console.log(`%cDisconnected! (Reason: "${err}")`, "color:red")
         document.getElementById("betaconnecttext").innerHTML = "❗Unable to Update to Beta Channel!"
