@@ -62,7 +62,7 @@ if (process.platform == "win32") {
 
 // fs.writeFileSync(path.join(__dirname,"store","local.json"), "");
 const rev = JSON.parse(fs.readFileSync(path.join(sanlocalappdata,"store","version.json")));
-document.getElementById("rev").innerHTML = `BETA ${rev.betaversion}`;
+document.getElementById("rev").innerHTML = `BETA ${rev.betaversion}`
 
 var tag = null;
 
@@ -3978,6 +3978,15 @@ function CloseSettings() {
     setTimeout(function() {
         document.getElementById("settingscont").style.display = "none";
     }, 200)
+    
+    if (document.getElementById("settingscont").style.display = "none") {
+        document.getElementById("betadialog").style.transform = "translate(-50%,-50%) scale(0%,0%)"
+        document.getElementById("betadialog").style.animation = "poprev 0.2s forwards"
+        document.getElementById("overlay").style.zIndex = "3"
+        setTimeout(() => {
+            document.getElementById("betadialog").style.display = "none"
+        }, 200)
+    }
 }
 
 function CloseWindow() {
@@ -8134,20 +8143,74 @@ function CheckBeta() {
     }
 }
 
+if (document.getElementById("settingscont").style.display = "none") {
+    document.getElementById("betadialog").style.display = "none"
+    document.getElementById("betaconnect").style.display = "none"
+}
+
 function ToggleBeta() {
     const version = JSON.parse(fs.readFileSync(path.join(sanlocalappdata,"store","version.json")))
 
-    if (version.beta == true) {
-        version["beta"] = false
-        fs.writeFileSync(path.join(sanlocalappdata,"store","version.json"), JSON.stringify(version, null, 2))
-    } else {
-        version["beta"] = true
-        fs.writeFileSync(path.join(sanlocalappdata,"store","version.json"), JSON.stringify(version, null, 2))
-
-        // ipcRenderer.send('resetcomplete')
+    function ShowBetaDialog() {
+        document.getElementById("betadialog").style.display = "flex"
+        document.getElementById("betadialog").style.animation = "pop 0.5s forwards"
+        document.getElementById("betatext").style.animation = "bounce 1s ease-in-out infinite forwards";
+        document.getElementById("overlay").style.zIndex = "19"
     }
 
-    CheckBeta()
+    if (version.beta == false) {
+        ShowBetaDialog()
+    } else {
+        version["beta"] = false
+        fs.writeFileSync(path.join(sanlocalappdata,"store","version.json"), JSON.stringify(version, null, 4))
+        // ipcRenderer.send('resetcomplete')
+    }
+}
+
+function BetaAccept() {
+    const version = JSON.parse(fs.readFileSync(path.join(sanlocalappdata,"store","version.json")))
+    
+    document.getElementById("betadialog").style.animation = "poprev 0.2s forwards"
+    setTimeout(() => {
+        document.getElementById("betaconnecttext").innerHTML = "🌐 Checking Network Connection..."
+        document.getElementById("betadialog").style.display = "none"
+        document.getElementById("betaconnect").style.display = "flex"
+        document.getElementById("betaconnect").style.animation = "pop 0.5s forwards"
+    }, 200)
+
+    fetch("https://www.github.com/steamachievementnotifier/steamachievementnotifier/").then(res => {
+        if (res.ok == true) {
+            return `Connected! (Status Code: ${res.status})`
+        } else {
+            Promise.reject()
+        }
+    }).then(status => {
+        console.log(`%c${status}`, "color: lime")
+        document.body.style.pointerEvents = "none"
+        document.getElementById("betaconnecttext").innerHTML = "Restarting App..."
+        document.getElementById("betaconnecttext").style.margin = "0px"
+
+        version["beta"] = true
+        fs.writeFileSync(path.join(sanlocalappdata,"store","version.json"), JSON.stringify(version, null, 4))
+
+        // ipcRenderer.send('resetcomplete')
+    }).catch(err => {
+        console.log(`%cDisconnected! (Reason: "${err}")`, "color:red")
+        document.getElementById("betaconnecttext").innerHTML = "❗Unable to Update to Beta Channel!"
+        setTimeout(CloseBetaConnect, 2000)
+    })
+}
+
+function BetaCancel() {
+    CloseSettings()
+}
+
+function CloseBetaConnect() {
+    document.getElementById("betaconnect").style.animation = "poprev 0.2s forwards"
+    document.getElementById("overlay").style.zIndex = "3"
+    setTimeout(() => {
+        document.getElementById("betaconnect").style.display = "none"
+    }, 200)
 }
 
 ipcRenderer.on('displayupdated', (event, w, h, sf) => {
