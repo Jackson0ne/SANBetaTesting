@@ -7434,6 +7434,20 @@ function ToggleNoSteam() {
         });
     }
 
+    var execname;
+    var tasklist;
+
+    if (process.platform == "win32") {
+        execname = "steam.exe";
+        tasklist = "tasklist";
+    } else if (process.platform == "linux") {
+        execname = "steam";
+        tasklist = "ps -A";
+    } else if (process.platform == "darwin") {
+        execname = "steam"
+        tasklist = `ps -ax | grep ${execname}`
+    }
+
     if (issteamrunning == true) {
         if (config.nosteam == "false") {
             document.getElementById("nosteambox").style.display = "none";
@@ -8146,9 +8160,9 @@ function CheckBeta() {
     }
 
     if (version.beta == true) {
-        document.getElementById("betabox").checked = true
+        document.getElementById("joinbetabtn").innerHTML = "Leave Beta Channel"
     } else {
-        document.getElementById("betabox").checked = false
+        document.getElementById("joinbetabtn").innerHTML = "Join Beta Channel"
     }
 }
 

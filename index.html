@@ -151,7 +151,7 @@
                   <div class="betadiv"><span class="betaicon">🦠&nbsp;</span>Squash bugs and improve the app</div>
                   <div class="betadiv"><img src="./icon/discord.svg" width="12px" style="margin: 0px 8px 0px 3px;">Dedicated&nbsp;<span style="background: #5662f6; padding: 2px 3px; border-radius: 2px;">#beta-testing</span>&nbsp;Discord channel</div>
                   <div class="betadiv"><span class="betaicon">💭&nbsp;</span>Provide feedback on upcoming additions</div>
-                  <div class="betadiv"><span class="betaicon">💥&nbsp;</span><span style="background: rgba(255,0,0,0.5); padding: 5px; border-radius: 5px;">Bugs are likely (not for the squeamish!)</span></div>
+                  <div class="betadiv"><span class="betaicon">💥&nbsp;</span><span style="color: red"><u>Bugs are likely</u>&nbsp;(not for the squeamish!)</span></div>
                </div>
                <div id="betawarn" style="font-size: 8px; margin: 0px 0px 10px; color: rgba(255,255,255,0.75)"><span style="font-size: 10px;">⚠️</span> Steam Achievement Notifier will restart after joining the Beta Channel</div>
                <div id="betabtns">
@@ -324,20 +324,21 @@
                      <input id="nvdabox" type="checkbox">
                      <div class="optlbl" id="nvdalbl">Enable NVDA Support</div>
                   </div>
-
-                  <div class="optcont" id="beta" style="cursor: pointer; margin-top: 5px" onclick="ToggleBeta()">
-                     <input id="betabox" type="checkbox">
-                     <div class="optlbl" id="betalbl">Join Beta Channel</div>
-                     <span style="color: red; margin-left: 4px;">*</span>
-                  </div>
-
                   <hr style="margin: auto; margin-top: 5px; width: 88%; height: 0.5px; background: white; border: 0.5px solid white; opacity: 0.5;">
+                  
+                  <!-- Beta Button -->
+                  <div class="optcont" id="beta">
+                     <button id="joinbetabtn" onclick="ToggleBeta()">Join Beta Channel</button>
+                  </div>
+                  <!-- Beta Button -->
+
                   <div class="optcont" id="resetcont">
                      <div id="resetcontinner"  onclick="ResetAppConfirm()" onmouseover="ResetHover()" onmouseleave="ResetOut()">
-                        <img id="reseticon" src="./icon/reset.svg" width="20px" style="margin-right: 2px">
+                        <img id="reseticon" src="./icon/reset.svg" width="20px" style="margin-right: 2px;">
                         <span id="resetlbl">Reset App to Default</span>
                      </div>
                   </div>
+
                </div>
             </div>
             <div id="revcont">
