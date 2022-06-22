@@ -2901,8 +2901,8 @@ input[type="color"]::-webkit-color-swatch {
     background: red;
 }
 
-#betaconnect {
-    display: none;
+#betaerror {
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -2912,7 +2912,7 @@ input[type="color"]::-webkit-color-swatch {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%) scale(0%,0%);
+    transform: translate(-50%,-50%) scale(100%,100%);
     border: 1px solid white;
     border-radius: 5px;
     font-family: "Titillium Web";
@@ -2920,13 +2920,26 @@ input[type="color"]::-webkit-color-swatch {
     z-index: 20;
 }
 
-#betaconnectbtn {
+#betaerrorsub {
+    font-family: "Noto Sans";
+    font-size: 9px;
+    margin: 5px 5px 10px;
+}
+
+#betaerrorbtn:not(hover) {
     width: 100px;
     border: none;
     border-radius: 5px;
+    background: rgba(32,62,122,1);
+    color: white;
+    font-family: "Titillium Web";
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+#betaerrorbtn:hover {
     background: white;
     color: black;
-    font-family: "Titillium Web";
 }
 
 @keyframes fadein {
