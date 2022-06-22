@@ -62,11 +62,11 @@ if (process.platform == "win32") {
 
 const version = JSON.parse(fs.readFileSync(path.join(sanlocalappdata,"store","version.json")));
 
-if (version.beta == true) {
-    document.getElementById("rev").innerHTML = `BETA ${rev.betaversion}`;
+if (version.beta == true && fs.existsSync(path.join(sanlocalappdata,"store","app","beta.txt"))) {
+    document.getElementById("rev").innerHTML = `BETA ${version.betaversion}`;
     document.getElementById("betalogo").style.display = "flex"
 } else {
-    document.getElementById("rev").innerHTML = `${rev.version}`
+    document.getElementById("rev").innerHTML = `${version.version}`
     document.getElementById("betalogo").style.display = "none"
 }
 
