@@ -159,11 +159,10 @@
                   <button id="betacancel" onclick="BetaCancel()">Nope, I'll stay here...</button>
                </div>
          </div>
-         <div id="betaconnect">
-            <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
-               <!-- <img id="betaconnectimg" src="./icon/reset.svg" width="20px" style="margin: 0px 5px 8px 0px;"> -->
-               <span id="betaconnecttext" style="margin-bottom: 15px;">🌐 Checking Network Connection...</span>
-            </div>
+         <div id="betaerror">
+            <div id="betaerrortext"></div>
+            <div id="betaerrorsub"></div>
+            <button id="betaerrorbtn" onclick="CloseBetaError()">Close</button>
          </div>
          <!-- Beta Channel Dialog -->
 
@@ -244,8 +243,6 @@
                         <div>%</div>
                      </div>
                   </div>
-
-                  <!-- Notification Opacity Slider -->
                   <div class="optcont" id="opacity">
                      <div class="optlbl" id="opacitylbl">Notification Opacity: </div>
                      <div class="optcont" id="opacityslidercont">
@@ -256,8 +253,6 @@
                         <div>%</div>
                      </div>
                   </div>
-                  <!-- Notification Opacity Slider -->
-
                   <hr style="margin: auto; margin-top: 0px; width: 88%; height: 0.5px; background: white; border: 0.5px solid white; opacity: 0.5;">
                   <div class="optcont" id="nosteam" style="margin-top: 5px" onclick="ToggleNoSteam()">
                      <input id="nosteambox" type="checkbox">

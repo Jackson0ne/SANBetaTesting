@@ -65,9 +65,11 @@ const version = JSON.parse(fs.readFileSync(path.join(sanlocalappdata,"store","ve
 if (version.beta == true && fs.existsSync(path.join(sanlocalappdata,"store","app","beta.txt"))) {
     document.getElementById("rev").innerHTML = `BETA ${version.betaversion}`;
     document.getElementById("betalogo").style.display = "flex"
+    // document.getElementById("joinbetabtn").innerHTML = "Join Beta Channel"
 } else {
     document.getElementById("rev").innerHTML = `${version.version}`
     document.getElementById("betalogo").style.display = "none"
+    // document.getElementById("joinbetabtn").innerHTML = "Leave Beta Channel"
 }
 
 var tag = null;
@@ -3986,11 +3988,13 @@ function CloseSettings() {
     }, 200)
     
     if (document.getElementById("settingscont").style.display = "none") {
-        document.getElementById("betadialog").style.transform = "translate(-50%,-50%) scale(0%,0%)"
+        // document.getElementById("betadialog").style.transform = "translate(-50%,-50%) scale(0%,0%)"
         document.getElementById("betadialog").style.animation = "poprev 0.2s forwards"
+        document.getElementById("betaerror").style.animation = "poprev 0.2s forwards"
         document.getElementById("overlay").style.zIndex = "3"
         setTimeout(() => {
             document.getElementById("betadialog").style.display = "none"
+            document.getElementById("betaerror").style.display = "none"
         }, 200)
     }
 }
@@ -8151,7 +8155,7 @@ function CheckBeta() {
 
 if (document.getElementById("settingscont").style.display = "none") {
     document.getElementById("betadialog").style.display = "none"
-    document.getElementById("betaconnect").style.display = "none"
+    // document.getElementById("betaerror").style.display = "none"
 }
 
 function ToggleBeta() {
@@ -8179,10 +8183,7 @@ function BetaAccept() {
 
     document.getElementById("betadialog").style.animation = "poprev 0.2s forwards"
     setTimeout(() => {
-        document.getElementById("betaconnecttext").innerHTML = "🌐 Checking Network Connection..."
         document.getElementById("betadialog").style.display = "none"
-        document.getElementById("betaconnect").style.display = "flex"
-        document.getElementById("betaconnect").style.animation = "pop 0.5s forwards"
     }, 200)
 
     fetch("https://www.github.com/steamachievementnotifier/steamachievementnotifier/").then(res => {
@@ -8193,9 +8194,6 @@ function BetaAccept() {
         }
     }).then(status => {
         console.log(`%c${status}`, "color: lime")
-        document.body.style.pointerEvents = "none"
-        document.getElementById("betaconnecttext").innerHTML = "Restarting App..."
-        document.getElementById("betaconnecttext").style.margin = "0px"
 
         version["beta"] = true
         version["betaversion"] = 0
@@ -8204,8 +8202,10 @@ function BetaAccept() {
         ipcRenderer.send('resetcomplete')
     }).catch(err => {
         console.log(`%cDisconnected! (Reason: "${err}")`, "color:red")
-        document.getElementById("betaconnecttext").innerHTML = "❗Unable to Update to Beta Channel!"
-        setTimeout(CloseBetaConnect, 2000)
+        document.getElementById("betaerror").style.display = "flex"
+        document.getElementById("betaerrortext").innerHTML = "🛑 Unable to update to Beta Channel!"
+        document.getElementById("betaerrorsub").innerHTML = "Looks like you don't have a network connection. No internet = No Beta!"
+        document.getElementById("betaerror").style.animation = "pop 0.5s forwards"
     })
 }
 
@@ -8213,11 +8213,11 @@ function BetaCancel() {
     CloseSettings()
 }
 
-function CloseBetaConnect() {
-    document.getElementById("betaconnect").style.animation = "poprev 0.2s forwards"
+function CloseBetaError() {
+    document.getElementById("betaerror").style.animation = "poprev 0.2s forwards"
     document.getElementById("overlay").style.zIndex = "3"
     setTimeout(() => {
-        document.getElementById("betaconnect").style.display = "none"
+        document.getElementById("betaerror").style.display = "none"
     }, 200)
 }
 
