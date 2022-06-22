@@ -8162,6 +8162,7 @@ function ToggleBeta() {
         ShowBetaDialog()
     } else {
         version["beta"] = false
+        version["betaversion"] = 0
         fs.writeFileSync(path.join(sanlocalappdata,"store","version.json"), JSON.stringify(version, null, 4))
         // ipcRenderer.send('resetcomplete')
     }
@@ -8169,7 +8170,7 @@ function ToggleBeta() {
 
 function BetaAccept() {
     const version = JSON.parse(fs.readFileSync(path.join(sanlocalappdata,"store","version.json")))
-    
+
     document.getElementById("betadialog").style.animation = "poprev 0.2s forwards"
     setTimeout(() => {
         document.getElementById("betaconnecttext").innerHTML = "🌐 Checking Network Connection..."
@@ -8191,6 +8192,7 @@ function BetaAccept() {
         document.getElementById("betaconnecttext").style.margin = "0px"
 
         version["beta"] = true
+        version["betaversion"] = 0
         fs.writeFileSync(path.join(sanlocalappdata,"store","version.json"), JSON.stringify(version, null, 4))
 
         // ipcRenderer.send('resetcomplete')
