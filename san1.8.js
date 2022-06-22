@@ -60,9 +60,15 @@ if (process.platform == "win32") {
     fs.writeFileSync(path.join(sanlocalappdata,"store","launcher.json"), JSON.stringify(launcher, null, 2));
 }
 
-// fs.writeFileSync(path.join(__dirname,"store","local.json"), "");
-const rev = JSON.parse(fs.readFileSync(path.join(sanlocalappdata,"store","version.json")));
-document.getElementById("rev").innerHTML = rev.version;
+const version = JSON.parse(fs.readFileSync(path.join(sanlocalappdata,"store","version.json")));
+
+if (version.beta == true) {
+    document.getElementById("rev").innerHTML = `BETA ${rev.betaversion}`;
+    document.getElementById("betalogo").style.display = "flex"
+} else {
+    document.getElementById("rev").innerHTML = `${rev.version}`
+    document.getElementById("betalogo").style.display = "none"
+}
 
 var tag = null;
 

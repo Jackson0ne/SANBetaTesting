@@ -2809,6 +2809,20 @@ input[type="color"]::-webkit-color-swatch {
     padding: 0px 5px 0px;
 }
 
+#betalogo {
+    display: none;
+    position: absolute;
+    top: 132px;
+    right: 75px;
+    font-family: "VT323";
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background: blueviolet;
+    padding: 0px 5px 0px;
+    animation: bounce 1s infinite;
+}
+
 #betatagline {
     display: flex;
     justify-content: center;
