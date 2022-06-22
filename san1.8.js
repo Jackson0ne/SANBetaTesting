@@ -3988,7 +3988,6 @@ function CloseSettings() {
     }, 200)
     
     if (document.getElementById("settingscont").style.display = "none") {
-        // document.getElementById("betadialog").style.transform = "translate(-50%,-50%) scale(0%,0%)"
         document.getElementById("betadialog").style.animation = "poprev 0.2s forwards"
         document.getElementById("betaerror").style.animation = "poprev 0.2s forwards"
         document.getElementById("overlay").style.zIndex = "3"
