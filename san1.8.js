@@ -8179,15 +8179,31 @@ function ToggleBeta() {
         document.getElementById("betadialog").style.animation = "pop 0.5s forwards"
         document.getElementById("betatext").style.animation = "bounce 1s ease-in-out infinite forwards";
         document.getElementById("overlay").style.zIndex = "19"
+        document.getElementById("leavebetacont").style.display = "none"
+    }
+
+    function ShowLeaveBetaDialog() {
+        document.getElementById("betadialog").style.display = "flex"
+        document.getElementById("betadialog").style.animation = "pop 0.5s forwards"
+        document.getElementById("betatext").style.display = "none"
+        document.getElementById("sanbetalogo").style.display = "none"
+        document.getElementById("betatagline").style.display = "none"
+        document.getElementById("betadesccont").style.display = "none"
+        document.getElementById("betawarn").style.display = "none"
+        document.getElementById("betabtns").style.display = "none"
+        document.getElementById("overlay").style.zIndex = "19"
+
+        document.getElementById("betadialog").style.width = "50%"
+        document.getElementById("betadialog").style.height = "30%"
+        document.getElementById("betadialog").style.justifyContent = "center"
+        document.getElementById("betadialog").style.alignItems = "center"
+        document.getElementById("leavebetacont").style.display = "flex"
     }
 
     if (version.beta == false) {
         ShowBetaDialog()
     } else {
-        version["beta"] = false
-        version["betaversion"] = 0
-        fs.writeFileSync(path.join(sanlocalappdata,"store","version.json"), JSON.stringify(version, null, 4))
-        ipcRenderer.send('resetcomplete')
+        ShowLeaveBetaDialog()
     }
 }
 
@@ -8223,7 +8239,18 @@ function BetaAccept() {
 }
 
 function BetaCancel() {
-    CloseSettings()
+    document.getElementById("betadialog").style.animation = "poprev 0.2s forwards"
+    document.getElementById("overlay").style.zIndex = "3"
+    setTimeout(() => {
+        document.getElementById("betadialog").style.display = "none"
+    }, 200)
+}
+
+function LeaveBeta() {
+    version["beta"] = false
+    version["betaversion"] = 0
+    fs.writeFileSync(path.join(sanlocalappdata,"store","version.json"), JSON.stringify(version, null, 4))
+    ipcRenderer.send('resetcomplete')
 }
 
 function CloseBetaError() {
