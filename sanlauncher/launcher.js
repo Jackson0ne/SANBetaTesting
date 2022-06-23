@@ -1,6 +1,6 @@
 document.getElementById("maincont").style.opacity = 1
 
-const { ipcRenderer } = require('electron')
+const { ipcRenderer, app } = require('electron')
 const exec = require('child_process').exec
 const execFile = require('child_process').execFile
 const spawn = require('child_process').spawn
@@ -35,7 +35,45 @@ const ver = "1.84"
 const exename = `SteamAchievementNotifierV${ver}.exe`
 const appimgname = `SteamAchievementNotifierV${ver}.AppImage`
 const appdatadir = `Steam Achievement Notifier (V1.8)`
-const extractdirname = "SteamAchievementNotifier-main"
+var branch
+
+// Check for first-time setup ("version.json" would not exist yet)
+if (fs.existsSync(path.join(localappdata,appdatadir,"store","version.json"))) {
+    var localver = JSON.parse(fs.readFileSync(path.join(localappdata,appdatadir,"store","version.json")))
+    
+    if (localver.beta == true) {
+        branch = "beta"
+        console.log(`%cBeta Branch enabled`,"color: mediumpurple")
+    } else {
+        branch = "main"
+        console.log(`%cMain Branch enabled`,"color: blue")
+    }
+    
+    if (localver.beta == false && fs.existsSync(path.join(localappdata,appdatadir,"store","app","beta.txt"))) {
+        fs.rmSync(path.join(localappdata,appdatadir,"store","app"), { recursive: true, force: true })
+        console.log(`%cRemoved Beta "app" directory`, "color: limegreen")
+    
+        fs.renameSync(path.join(localappdata,appdatadir,"store","appbackup"), path.join(localappdata,appdatadir,"store","app"))
+        console.log(`%cMain Branch "app" directory restored successfully`,"color: limegreen")
+    
+        localver["betaversion"] = 0
+        fs.writeFileSync(path.join(localappdata,appdatadir,"store","version.json"), JSON.stringify(localver, null, 4))
+    } else if (localver.beta == true && !fs.existsSync(path.join(localappdata,appdatadir,"store","app","beta.txt"))) {
+        fs.renameSync(path.join(localappdata,appdatadir,"store","app"), path.join(localappdata,appdatadir,"store","appbackup"))
+        console.log(`%cMain "app" directory backed up successfully`, "color: limegreen")
+    }
+    
+    // ^^^ Add additional error handling for if "app" folder does not exist for some reason
+} else {
+    console.log(`%c"version.json" not present in ${path.join(localappdata,appdatadir,"store")}\nInstalling Main branch...`, "color: orange")
+    branch = "main"
+}
+
+const ghuser = "Jackson0ne"
+const ghrepo = "SANBetaTesting"
+// const ghuser = "SteamAchievementNotifier"
+// const ghrepo = "SteamAchievementNotifier"
+const extractdirname = `${ghrepo}-${branch}`
 
 function Run() {
     function CheckForPreviousVersions() {
@@ -203,6 +241,16 @@ function Run() {
                     console.log("%c\"version.json\" successfully copied to " + path.join(localappdata,appdatadir), "color: darkorchid")
                     current = JSON.parse(fs.readFileSync(path.join(localappdata,appdatadir,"store","version.json")))
 
+                    if (current.beta == undefined) {
+                        current["beta"] = false
+                        fs.writeFileSync(path.join(localappdata,appdatadir,"store","version.json"), JSON.stringify(current, null, 2));
+                    }
+
+                    if (current.betaversion == undefined) {
+                        current["betaversion"] = 0
+                        fs.writeFileSync(path.join(localappdata,appdatadir,"store","version.json"), JSON.stringify(current, null, 2));
+                    }
+
                     CopyFiles()
                 }
             })
@@ -247,7 +295,7 @@ function Run() {
                                 if (err) {
                                     console.log("%cZIP COPY ERROR: " + err, "color: red")
                                 } else {
-                                    console.log("%cZIP copied to ~/.local/share/Steam Achievement Notifier (V1.8)", "color: deepskyblue")
+                                    console.log(`%cZIP copied to ~/.local/share/${appdatadir}`, "color: deepskyblue")
                                     filecopy = exec(`unzip -o '${path.join(localappdata,appdatadir,"app.zip")}' -d '${path.join(localappdata,appdatadir,"store","app")}'`)
                                     
                                     filecopy.on('error', (err) => {
@@ -265,7 +313,7 @@ function Run() {
                         console.log("%cAll required files copied!", "color: limegreen")
                         TestQuit()
                     }
-                    console.log(files)
+                    // console.log(files)
                 }
             })
         }
@@ -332,12 +380,12 @@ function Run() {
 
         if (launcher) {
             if (!launcher.user == "") {
-                var user = launcher.user
+                var username = launcher.user
 
                 randommsg.push(
-                    `Rise and shine, ${user}. Rise. And. Shine...`,
-                    `What kind of a name is ${user}?`,
-                    `Hey ${user}, you're finally awake!`
+                    `Rise and shine, ${username}. Rise. And. Shine...`,
+                    `What kind of a name is ${username}?`,
+                    `Hey ${username}, you're finally awake!`
                 )
             }
         }
@@ -380,13 +428,10 @@ function Run() {
 
         const https = require('https')
 
-        const user = "SteamAchievementNotifier"
-        const repo = "SteamAchievementNotifier"
-
-        const commits = `https://api.github.com/repos/${user}/${repo}/commits`
+        const commits = `https://api.github.com/repos/${ghuser}/${ghrepo}/commits?sha=${branch}`
         fetch(commits, { cache: "no-store" }).then(response => {
             if (!response.ok) {
-                return Promise.reject(err)
+                return Promise.reject(response.status)
             } else {
                 return response.json()
             }
@@ -396,18 +441,35 @@ function Run() {
             function DownloadFiles() {
                 console.log("Current: ", current)
 
-                fetch(`https://cdn.jsdelivr.net/gh/${user}/${repo}@${sha}/version.json`).then(res => res.json()).then(data => {
+                fetch(`https://cdn.jsdelivr.net/gh/${ghuser}/${ghrepo}@${sha}/version.json`).then(res => res.json()).then(data => {
                     var latest = data
                     console.log("Latest: ", latest)
 
+                    var repoversion
+                    var localversion
+
+                    if (branch == "beta") {
+                        repoversion = latest.betaversion
+                        localversion = current.betaversion
+                    } else {
+                        repoversion = latest.version
+                        localversion = current.version
+                    }
+
                     function CheckVersion() {
                         return new Promise(resolve => {
-                            if (latest.version > current.version) {
-                                console.log("%cUpdates found - downloading...", "color: blueviolet")
-                                document.getElementById("log").innerHTML = `Downloading App Revision ${latest.version} updates...`
-                                document.getElementById("log").style.color = "white"
+                            if (repoversion > localversion) {
+                                if (branch == "beta") {
+                                    console.log("%cBeta Updates found - downloading...", "color: blueviolet")
+                                    document.getElementById("log").innerHTML = `Downloading Beta App Revision ${repoversion} updates...`
+                                    document.getElementById("log").style.color = "mediumpurple"
+                                } else {
+                                    console.log("%cUpdates found - downloading...", "color: blueviolet")
+                                    document.getElementById("log").innerHTML = `Downloading App Revision ${repoversion} updates...`
+                                    document.getElementById("log").style.color = "white"
+                                }
 
-                                https.get(`https://codeload.github.com/${user}/${repo}/zip/main`, res => {
+                                https.get(`https://codeload.github.com/${ghuser}/${ghrepo}/zip/${branch}`, res => {
                                     var zip
                                     
                                     if (process.platform == "win32") {
@@ -420,8 +482,13 @@ function Run() {
                                     zip.on('finish', () => {
                                         zip.close()
 
-                                        current["version"] = latest.version
-                                        fs.writeFileSync(path.join(localappdata,appdatadir,"store","version.json"), JSON.stringify(current, null, 4))
+                                        if (branch == "beta") {
+                                            current["betaversion"] = latest.betaversion
+                                            fs.writeFileSync(path.join(localappdata,appdatadir,"store","version.json"), JSON.stringify(current, null, 4))
+                                        } else {
+                                            current["version"] = latest.version
+                                            fs.writeFileSync(path.join(localappdata,appdatadir,"store","version.json"), JSON.stringify(current, null, 4))
+                                        }
 
                                         var extract
                                         
@@ -433,12 +500,38 @@ function Run() {
 
                                         extract.on('exit', () => {
                                             function CheckForMissingFiles() {
-                                                var required = ["fonts","icon","img","notify","sanlauncher","sound","store","README.md","appentry.js","css.css","errwin.html","index.html","main.js","package-lock.json","package.json","san1.8.js","tooltip.js","vdf.js","version.json"]
+                                                var required = [
+                                                    ".gitattributes",
+                                                    ".gitignore",
+                                                    "fonts",
+                                                    "icon",
+                                                    "img",
+                                                    "notify",
+                                                    "sanlauncher",
+                                                    "sound",
+                                                    "store",
+                                                    "README.md",
+                                                    "appentry.js",
+                                                    "css.css",
+                                                    "errwin.html",
+                                                    "index.html",
+                                                    "main.js",
+                                                    "package-lock.json",
+                                                    "package.json",
+                                                    "san1.8.js",
+                                                    "tooltip.js",
+                                                    "vdf.js",
+                                                    "version.json"
+                                                ]
+
+                                                if (branch == "beta") {
+                                                    required.push("beta.txt")
+                                                }
                                             
                                                 var requiredfiles = []
                                                 var actualfiles = []
                                             
-                                                fs.readdir(path.join(localappdata,"Steam Achievement Notifier (V1.8)","store","app"), (err, files) => {
+                                                fs.readdir(path.join(localappdata,appdatadir,"store","app"), (err, files) => {
                                                     if (err) {
                                                         console.log(`%cError reading "app" dir: ` + err)
                                                         document.getElementById("log").innerHTML = `Error reading "app" dir: ${err}`
@@ -471,7 +564,7 @@ function Run() {
                                                             })
                                                         } else {
                                                             console.log(`%cAll required files exist in local "app" directory`,"color:limegreen")
-                                                            console.log(`%cApp updated to App Revision ${current.version}`, "color: limegreen")
+                                                            console.log(`%cApp updated to App Revision ${localversion}`, "color: limegreen")
                                                             document.getElementById("log").innerHTML = `Updated to App Revision ${latest.version}`
                                                             document.getElementById("log").style.color = "white"
                                                             resolve()
@@ -488,7 +581,7 @@ function Run() {
                                 })
                             } else {
                                 console.log(`%cApp is up to date`,"color: green")
-                                document.getElementById("log").innerHTML = `Latest Version (${current.version}) is already installed`
+                                document.getElementById("log").innerHTML = `Latest Version (${localversion}) is already installed`
                                 document.getElementById("log").style.color = "white"
                                 resolve()
                             }
@@ -508,7 +601,7 @@ function Run() {
                 })
             }
 
-            fetch(`https://cdn.jsdelivr.net/gh/${user}/${repo}@${sha}/`).then(response => {
+            fetch(`https://cdn.jsdelivr.net/gh/${ghuser}/${ghrepo}@${sha}/`).then(response => {
                 if (response.ok) {
                     return response
                 } else {
@@ -529,7 +622,7 @@ function Run() {
                 StartApp()
             })
         }).catch(err => {
-            console.log(`%cNo response received from Repo: ${user}/${repo} - loading local fallbacks...`, "color: red")
+            console.log(`%cNo response received from Repo: ${ghuser}/${ghrepo} - loading local fallbacks...`, "color: red")
             document.getElementById("log").innerHTML = `Unable to update...`
             document.getElementById("log").style.color = "red"
 

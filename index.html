@@ -142,22 +142,30 @@
 
          <!-- Beta Channel Dialog -->
          <div id="betadialog">
-               <div id="betatext">BETA</div>
-               <img id="sanbetalogo" src="./img/santextlogo.png" width="75%">
-               <div id="betatagline">Join the <span style="color: blueviolet; font-weight: bold;">&nbsp;Beta Channel&nbsp;</span> to get early access to new features!</div>
-               <div id="betadesccont">
-                  <div class="betadiv"><span class="betaicon">👀&nbsp;</span>Test new features before official release</div>
-                  <div class="betadiv"><span class="betaicon">🔄&nbsp;</span>Opt in/out of the Beta Channel at any time</div>
-                  <div class="betadiv"><span class="betaicon">🦠&nbsp;</span>Squash bugs and improve the app</div>
-                  <div class="betadiv"><img src="./icon/discord.svg" width="12px" style="margin: 0px 8px 0px 3px;">Dedicated&nbsp;<span style="background: #5662f6; padding: 2px 3px; border-radius: 2px;">#beta-testing</span>&nbsp;Discord channel</div>
-                  <div class="betadiv"><span class="betaicon">💭&nbsp;</span>Provide feedback on upcoming additions</div>
-                  <div class="betadiv"><span class="betaicon">💥&nbsp;</span><span style="color: red"><u>Bugs are likely</u>&nbsp;(not for the squeamish!)</span></div>
+            <div id="betatext">BETA</div>
+            <img id="sanbetalogo" src="./img/santextlogo.png" width="75%">
+            <div id="betatagline">Join the <span style="color: blueviolet; font-weight: bold;">&nbsp;Beta Channel&nbsp;</span> to get early access to new features!</div>
+            <div id="betadesccont">
+               <div class="betadiv"><span class="betaicon">👀&nbsp;</span>Test new features before official release</div>
+               <div class="betadiv"><span class="betaicon">🔄&nbsp;</span>Opt in/out of the Beta Channel at any time</div>
+               <div class="betadiv"><span class="betaicon">🦠&nbsp;</span>Squash bugs and improve the app</div>
+               <div class="betadiv"><img src="./icon/discord.svg" width="12px" style="margin: 0px 8px 0px 3px;">Dedicated&nbsp;<span style="background: #5662f6; padding: 2px 3px; border-radius: 2px;">#beta-testing</span>&nbsp;Discord channel</div>
+               <div class="betadiv"><span class="betaicon">💭&nbsp;</span>Provide feedback on upcoming additions</div>
+               <div class="betadiv"><span class="betaicon">💥&nbsp;</span><span style="color: red"><u>Bugs are likely</u>&nbsp;(not for the squeamish!)</span></div>
+            </div>
+            <div id="betawarn" style="font-size: 8px; margin: 0px 0px 10px; color: rgba(255,255,255,0.75)"><span style="font-size: 10px;">⚠️</span> Steam Achievement Notifier will restart after joining the Beta Channel</div>
+            <div id="betabtns">
+               <button id="betaok" onclick="BetaAccept()">Yup, sounds good!</button>
+               <button id="betacancel" onclick="BetaCancel()">Nope, I'll stay here...</button>
+            </div>
+            <div id="leavebetacont">
+               <div id="leavebetatitle">Leave Beta Channel?</div>
+               <div id="leavebetasub">App will revert to the most recent official release</div>
+               <div id="leavebetabtns">
+                  <button id="leavebetaok" onclick="LeaveBeta()">Leave Beta Channel</button>
+                  <button id="leavebetacancel" onclick="BetaCancel()">Stay on Beta Channel</button>
                </div>
-               <div id="betawarn" style="font-size: 8px; margin: 0px 0px 10px; color: rgba(255,255,255,0.75)"><span style="font-size: 10px;">⚠️</span> Steam Achievement Notifier will restart after joining the Beta Channel</div>
-               <div id="betabtns">
-                  <button id="betaok" onclick="BetaAccept()">Yup, sounds good!</button>
-                  <button id="betacancel" onclick="BetaCancel()">Nope, I'll stay here...</button>
-               </div>
+            </div>
          </div>
          <div id="betaerror">
             <div id="betaerrortext"></div>
