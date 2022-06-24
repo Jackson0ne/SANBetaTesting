@@ -144,16 +144,16 @@
          <div id="betadialog">
             <div id="betatext">BETA</div>
             <img id="sanbetalogo" src="./img/santextlogo.png" width="75%">
-            <div id="betatagline">Join the <span style="color: blueviolet; font-weight: bold;">&nbsp;Beta Channel&nbsp;</span> to get early access to new features!</div>
+            <div id="betatagline">Join the <span id="betahighlight" style="color: blueviolet; font-weight: bold;">&nbsp;Beta Channel&nbsp;</span> to get early access to new features!</div>
             <div id="betadesccont">
-               <div class="betadiv"><span class="betaicon">👀&nbsp;</span>Test new features before official release</div>
-               <div class="betadiv"><span class="betaicon">🔄&nbsp;</span>Opt in/out of the Beta Channel at any time</div>
-               <div class="betadiv"><span class="betaicon">🦠&nbsp;</span>Squash bugs and improve the app</div>
-               <div class="betadiv"><img src="./icon/discord.svg" width="12px" style="margin: 0px 8px 0px 3px;">Dedicated&nbsp;<span style="background: #5662f6; padding: 2px 3px; border-radius: 2px;">#beta-testing</span>&nbsp;Discord channel</div>
-               <div class="betadiv"><span class="betaicon">💭&nbsp;</span>Provide feedback on upcoming additions</div>
-               <div class="betadiv"><span class="betaicon">💥&nbsp;</span><span style="color: red"><u>Bugs are likely</u>&nbsp;(not for the squeamish!)</span></div>
+               <div class="betadiv"><span class="betaicon">👀&nbsp;</span><span id="betatest">Test new features before official release</span></div>
+               <div class="betadiv"><span class="betaicon">🔄&nbsp;</span><span id="betaoptin">Opt in/out of the Beta Channel at any time</span></div>
+               <div class="betadiv"><span class="betaicon">🦠&nbsp;</span><span id="betabugs">Squash bugs and improve the app</span></div>
+               <div class="betadiv"><img src="./icon/discord.svg" width="12px" style="margin: 0px 8px 0px 3px;"><span id="betadiscord">Dedicated&nbsp;<span style="background: #5662f6; padding: 2px 3px; border-radius: 2px;">#beta-testing</span>&nbsp;Discord channel</span></div>
+               <div class="betadiv"><span class="betaicon">💭&nbsp;</span><span id="betafb">Provide feedback on upcoming additions</span></div>
+               <div class="betadiv"><span class="betaicon">💥&nbsp;</span><span id="betabugswarn" style="color: red"><u>Bugs are likely</u>&nbsp;(not for the squeamish!)</span></div>
             </div>
-            <div id="betawarn" style="font-size: 8px; margin: 0px 0px 10px; color: rgba(255,255,255,0.75)"><span style="font-size: 10px;">⚠️</span> Steam Achievement Notifier will restart after joining the Beta Channel</div>
+            <div id="betawarn" style="font-size: 8px; margin: 0px 0px 10px; color: rgba(255,255,255,0.75)"><span style="font-size: 10px;">⚠️</span><span id="betawarntext">Steam Achievement Notifier will restart after joining the Beta Channel</span></div>
             <div id="betabtns">
                <button id="betaok" onclick="BetaAccept()">Yup, sounds good!</button>
                <button id="betacancel" onclick="BetaCancel()">Nope, I'll stay here...</button>
@@ -355,8 +355,8 @@
          </div>
          <div id="customisemenu">
             <div style="width: 500px; height: 107.37px"></div>
-            <!-- <img id="customiserimg" src="./img/sancustomisertextlogo.png" width="500px" style="-webkit-app-region: no-drag" onclick="OpenDevTools()"> -->
-            <img id="customiserimg" src="./img/sancustomisertextlogo.png" width="500px" style="-webkit-app-region: no-drag">
+            <img id="customiserimg" src="./img/sancustomisertextlogo.png" width="500px" style="-webkit-app-region: no-drag" onclick="OpenDevTools()">
+            <!-- <img id="customiserimg" src="./img/sancustomisertextlogo.png" width="500px" style="-webkit-app-region: no-drag"> -->
             <div id="customiserbody">
                <div id="customisermain">
                   <div id="notifymain">
@@ -443,6 +443,7 @@
                               <option value="bgsolid" id="typesolid">Solid Colour</option>
                               <option value="bg" id="typegradient">Colour Gradient</option>
                               <option value="img" id="typeimg">Background Image</option>
+                              <option value="game" id="typegame">Game Art</option>
                            </select>
                         </div>
                         <div class="customiserlbl" id="colourslbl">COLOURS:</div>
@@ -607,6 +608,7 @@
                               <option value="bgsolid" id="typesolidrare">Solid Colour</option>
                               <option value="bg" id="typegradientrare">Colour Gradient</option>
                               <option value="img" id="typeimgrare">Background Image</option>
+                              <option value="game" id="typegamerare">Game Art</option>
                            </select>
                         </div>
                         <div class="customiserlbl" id="rarecolourslbl">COLOURS:</div>
